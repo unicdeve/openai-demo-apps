@@ -4,6 +4,7 @@ import { dates } from '@/utils/date';
 import Image from 'next/image';
 import { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
 import { useEffect, useState } from 'react';
+import './home-styles.css';
 
 export default function Home() {
 	const [error, setError] = useState('');
