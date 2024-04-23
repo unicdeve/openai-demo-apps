@@ -1,113 +1,171 @@
-import Image from "next/image";
+'use client';
+import { useOpenAi } from '@/hooks/openai/use-openai';
+import { dates } from '@/utils/date';
+import Image from 'next/image';
+import { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+	const [error, setError] = useState('');
+	const [tickers, setTickers] = useState<string[]>([]);
+	const [loadingStockData, setLoadingStockData] = useState(false);
+	const [generatingReports, setGeneratingReports] = useState(false);
+	const [text, setText] = useState('');
+	const [report, setReport] = useState<string | null>('');
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+	const openai = useOpenAi();
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+	const fetchReport = async (stockData: any) => {
+		const messages: ChatCompletionMessageParam[] = [
+			{
+				role: 'system',
+				content:
+					'You are a trading guru. Given data on share prices over the past 3 days, write a report of no more than 150 words describing the stocks performance and recommending whether to buy, hold or sell.',
+			},
+			{
+				role: 'user',
+				content: stockData,
+			},
+		];
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+		setGeneratingReports(true);
+		try {
+			const response = await openai.chat.completions.create({
+				temperature: 1.1, // You need to be careful of this, for this use-case, this value seems to make the most sense
+				model: 'gpt-3.5-turbo',
+				messages,
+			});
+			console.log(response);
+			setReport(response.choices[0].message.content);
+		} catch {
+			setError('Unable to generate report from openai');
+		} finally {
+			setGeneratingReports(false);
+			setLoadingStockData(false);
+		}
+	};
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+	const generateReport = async () => {
+		setLoadingStockData(true);
+		try {
+			// const stockData = await Promise.all(
+			// 	tickers.map(async (ticker) => {
+			// 		const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${dates.startDate}/${dates.endDate}?apiKey=${process.env.NEXT_PUBLIC_POLYGON_API_KEY}`;
+			// 		const response = await fetch(url);
+			// 		const data = await response.text();
+			// 		if (response.status === 200) {
+			// 			return data;
+			// 		} else {
+			// 			setError(
+			// 				`There was an error fetching stock data for the ticker: ${ticker}`
+			// 			);
+			// 		}
+			// 	})
+			// );
+			// NOTE: Above API call was disabled to avoid cost, enable it for dynamic data in the future
+			const stockData = [
+				'{"ticker":"AMZN","queryCount":1,"resultsCount":1,"adjusted":true,"results":[{"v":5.5099718e+07,"vw":175.546,"o":178.74,"c":174.63,"h":179,"l":173.44,"t":1713499200000,"n":569799}],"status":"OK","request_id":"e6e4812291c74734c871a307697a3278","count":1}',
+			];
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+			// console.log(stockData);
+
+			fetchReport(stockData.join(''));
+		} catch (err) {
+			setError('There was an error fetching stock data.');
+		}
+	};
+
+	const addTickers = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		if (text.length > 2) {
+			setTickers((prev) => [...prev, text]);
+			setText('');
+			setError('');
+		} else {
+			setError(
+				'You must add at least one ticker. A ticker is a 3 letter or more code for a stock. E.g TSLA for Tesla.'
+			);
+		}
+	};
+
+	return (
+		<main className='flex min-h-screen flex-col items-center justify-between p-24'>
+			<header>
+				<Image
+					src='/images/logo-dave-text.png'
+					alt="Dodgy Dave's Stock Predictions"
+					width={340}
+					height={150}
+				/>
+			</header>
+			<main>
+				{!loadingStockData && (
+					<section className='action-panel'>
+						<form id='ticker-input-form' onSubmit={addTickers}>
+							<label htmlFor='ticker-input'>
+								Add up to 3 stock tickers below to get a super accurate stock
+								predictions report👇{' '}
+							</label>
+							<div className='form-input-control'>
+								<input
+									type='text'
+									id='ticker-input'
+									placeholder='MSFT'
+									value={text}
+									onChange={(e) => setText(e.target.value)}
+								/>
+								<button className='add-ticker-btn' type='submit'>
+									<Image
+										src='/images/add.svg'
+										alt='add'
+										width={14}
+										height={14}
+									/>
+								</button>
+							</div>
+							<span className='text-red-500 text-xs min-h-8'>{error}</span>
+						</form>
+						<p className='ticker-choice-display'>
+							{tickers.length > 0
+								? tickers.join(', ')
+								: 'Your tickers will appear here...'}
+						</p>
+						<button
+							className='generate-report-btn'
+							disabled={tickers.length === 0}
+							type='button'
+							onClick={generateReport}
+						>
+							Generate Report
+						</button>
+						<p className='tag-line'>Always correct 15% of the time!</p>
+					</section>
+				)}
+
+				{(loadingStockData || generatingReports) && (
+					<section className='loading-panel'>
+						<Image
+							src='images/loading.svg'
+							alt='loading'
+							height={400}
+							width={200}
+						/>
+						<div id='api-message'>
+							{generatingReports
+								? 'Generating Report'
+								: 'Querying Stocks API...'}
+						</div>
+					</section>
+				)}
+
+				<section className='output-panel'>
+					<h2>Your Report 😜</h2>
+
+					{report && <p className='flex'>{report}</p>}
+				</section>
+			</main>
+			<footer>&copy; This is not real financial advice!</footer>
+		</main>
+	);
 }
