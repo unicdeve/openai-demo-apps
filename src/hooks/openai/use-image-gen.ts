@@ -1,9 +1,17 @@
+import { useApiKeys } from '@/contexts/api-keys.context';
 import { useOpenAi } from './use-openai';
 
 export const useImageGeneration = () => {
+	const { apiKeys, setOpenDialog } = useApiKeys();
 	const openai = useOpenAi();
 
 	const generateImage = async (prompt: string) => {
+		if (!apiKeys.openaiKey) {
+			setOpenDialog(true);
+
+			return;
+		}
+
 		const response = await openai.images.generate({
 			model: 'dall-e-2', // default dall-e-2
 			prompt, // required

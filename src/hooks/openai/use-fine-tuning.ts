@@ -1,7 +1,9 @@
 import { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
 import { useOpenAi } from './use-openai';
+import { useApiKeys } from '@/contexts/api-keys.context';
 
 export const useBookList = () => {
+	const { apiKeys, setOpenDialog } = useApiKeys();
 	const openai = useOpenAi();
 
 	/* Upload training data */
@@ -35,6 +37,12 @@ export const useBookList = () => {
 	// You can use the above step when you want to maybe save stuffs to your backend DB
 
 	const generateResponse = async () => {
+		if (!apiKeys.openaiKey) {
+			setOpenDialog(true);
+
+			return;
+		}
+
 		const messages: ChatCompletionMessageParam[] = [
 			{
 				role: 'user',

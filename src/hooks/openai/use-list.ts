@@ -1,10 +1,18 @@
 import { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
 import { useOpenAi } from './use-openai';
+import { useApiKeys } from '@/contexts/api-keys.context';
 
 export const useBookList = () => {
+	const { apiKeys, setOpenDialog } = useApiKeys();
 	const openai = useOpenAi();
 
 	const generateResponse = async () => {
+		if (!apiKeys.openaiKey) {
+			setOpenDialog(true);
+
+			return;
+		}
+
 		const messages: ChatCompletionMessageParam[] = [
 			{
 				role: 'system',
