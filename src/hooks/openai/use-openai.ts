@@ -10,6 +10,8 @@ export const useOpenAi = () => {
 		return new OpenAI({
 			dangerouslyAllowBrowser: true,
 			apiKey: apiKeys.openaiKey,
+			baseURL:
+				process.env.NEXT_PUBLIC_OPENAI_BASE_URL || 'https://api.openai.com/v1',
 		});
 	}, [apiKeys.openaiKey]);
 
