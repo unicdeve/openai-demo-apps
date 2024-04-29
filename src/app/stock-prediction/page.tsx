@@ -80,11 +80,13 @@ export default function StockPrediction() {
 				</section>
 			)}
 
-			<section className='output-panel'>
-				<h2>Your Report 😜</h2>
+			{report && (
+				<section className='output-panel'>
+					<h2>Your Report 😜</h2>
 
-				{report && <p className='flex'>{report}</p>}
-			</section>
+					<p className='flex'>{report}</p>
+				</section>
+			)}
 			<footer>&copy; This is not real financial advice!</footer>
 		</main>
 	);

@@ -29,9 +29,10 @@ export const ApiKeysProvider: FC<{
 	children: ReactNode;
 }> = ({ children }) => {
 	const [openDialog, setOpenDialog] = useState(false);
+	// default value to be used locally because I won't set up with my personal keys
 	const [apiKeys, setApiKeys] = useState<ApiKeysType>({
-		openaiKey: '',
-		polygoinKey: '',
+		openaiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY || '',
+		polygoinKey: process.env.NEXT_PUBLIC_POLYGON_API_KEY || '',
 	});
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {

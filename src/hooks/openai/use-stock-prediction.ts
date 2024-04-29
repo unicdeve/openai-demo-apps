@@ -15,7 +15,7 @@ export const useStockPrediction = () => {
 
 	const openai = useOpenAi();
 
-	const fetchReport = async (stockData: any) => {
+	const fetchReport = async (stockData: string) => {
 		if (!apiKeys.openaiKey || !apiKeys.polygoinKey) {
 			setOpenDialog(true);
 
@@ -37,11 +37,12 @@ export const useStockPrediction = () => {
 		try {
 			const response = await openai.chat.completions.create({
 				temperature: 1.1, // You need to be careful of this, for this use-case, this value seems to make the most sense
-				model: 'gpt-3.5-turbo',
+				// model: 'gpt-3.5-turbo',
+				model: 'LM Studio Community/Meta-Llama-3-8B-Instruct-GGUF',
 				messages,
 			});
-			console.log(response);
 			setReport(response.choices[0].message.content);
+			setTickers([]);
 		} catch {
 			setError('Unable to generate report from openai');
 		} finally {

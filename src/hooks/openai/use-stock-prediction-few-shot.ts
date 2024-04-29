@@ -14,7 +14,7 @@ export const useStockPredictionWithFewShot = () => {
 	const { apiKeys, setOpenDialog } = useApiKeys();
 	const openai = useOpenAi();
 
-	const fetchReport = async (stockData: any) => {
+	const fetchReport = async (stockData: string) => {
 		if (!apiKeys.openaiKey || !apiKeys.polygoinKey) {
 			setOpenDialog(true);
 

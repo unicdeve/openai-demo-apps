@@ -27,7 +27,6 @@ main {
 }
 
 .output-panel {
-	display: none;
 	justify-content: flex-start;
 	border: 2px solid;
 	padding: 1em 2em;
