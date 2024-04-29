@@ -8,11 +8,6 @@ header {
 	margin: 0 auto;
 }
 
-main {
-	display: flex;
-	justify-content: center;
-}
-
 /* Panels */
 
 .action-panel,

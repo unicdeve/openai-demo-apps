@@ -25,16 +25,16 @@
       Typography 
      ================= */
 
-h1 {
+.movie-pitch-container h1 {
 	font-family: 'Playfair Display SC', serif;
 	text-align: center;
 }
 
-h2 {
+.movie-pitch-container h2 {
 	font-size: 1.3em;
 }
 
-p {
+.movie-pitch-container p {
 	line-height: 1.35em;
 }
 
@@ -42,7 +42,7 @@ p {
       Sections 
      ================= */
 
-header {
+.movie-pitch-container header {
 	background-color: var(--dark);
 	display: flex;
 	justify-content: center;
@@ -50,22 +50,22 @@ header {
 	gap: 0.3em;
 }
 
-header > img {
+.movie-pitch-container header > img {
 	height: 26px;
 }
 
-header > a {
+.movie-pitch-container header > a {
 	color: var(--light);
 	font-size: 1.5em;
 	text-decoration: none;
 	padding: 1em 0;
 }
 
-header span {
+.movie-pitch-container header span {
 	font-weight: 700;
 }
 
-section {
+.movie-pitch-container section {
 	margin: 0 auto;
 	background-color: var(--light);
 	border-radius: var(--border-rad-lg);
@@ -137,7 +137,7 @@ section {
 	font-size: 85%;
 }
 
-textarea {
+.movie-pitch-container textarea {
 	background-color: var(--light-grey);
 	padding: 0.8em;
 	border: none;
@@ -152,7 +152,7 @@ textarea {
 	font-family: 'Poppins', sans-serif;
 }
 
-textarea::placeholder {
+.movie-pitch-container textarea::placeholder {
 	color: var(--medium-dark);
 	font-size: 88%;
 	opacity: 0.8;
@@ -177,8 +177,7 @@ textarea::placeholder {
 		font-size: 100%;
 	}
 
-	textarea::placeholder {
-		font-size: 100%;
+	.movie-pitch-container textarea::placeholder {
 		opacity: 0.8;
 	}
 }
@@ -187,13 +186,13 @@ textarea::placeholder {
       Buttons & SVG 
      ================= */
 
-button {
+.movie-pitch-container button {
 	border: none;
 	background: var(--pink);
 	cursor: pointer;
 }
 
-button:hover {
+.movie-pitch-container button:hover {
 	background-color: var(--dark);
 }
 
@@ -221,7 +220,7 @@ button:hover {
 	box-shadow: 1px 1px 5px 1px var(--medium-dark);
 }
 
-img.loading {
+.movie-pitch-container img.loading {
 	max-width: 40px;
 	filter: none;
 }
@@ -248,7 +247,7 @@ img.loading {
       Footer 
      ================= */
 
-footer {
+.movie-pitch-container footer {
 	background-color: var(--dark);
 	color: var(--light);
 	padding: 0.8em;

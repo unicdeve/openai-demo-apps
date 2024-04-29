@@ -78,7 +78,7 @@ export const ApiKeysProvider: FC<{
 									name='polygoinKey'
 									value={apiKeys.polygoinKey}
 									onChange={onChange}
-									placeholder='Polygon api key'
+									placeholder='Polygon api key (optional)'
 								/>
 							</ModalBody>
 							<ModalFooter>

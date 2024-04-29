@@ -8,7 +8,7 @@ export default function MoviePitch() {
 		useAdvertiseCopyWithFewShot();
 
 	return (
-		<main>
+		<main className='advertify-main'>
 			<section className='intro'>
 				<h1>Advertify</h1>
 				<h2>

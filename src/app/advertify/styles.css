@@ -36,54 +36,53 @@
 	max-height: 95vh;
 }
 
-h1 {
+.advertify-main h1 {
 	font-size: 2.2rem;
 	margin-top: 0.5em;
 }
 
-h2,
-h3,
-h4 {
+.advertify-main h2,
+.advertify-main h3,
+.advertify-main h4 {
 	text-align: center;
 	font-weight: 300;
 	margin: 0 0 0.5em 0;
 	padding: 0 2rem;
 }
 
-h3 {
+.advertify-main h3 {
 	font-size: 1.4rem;
 }
 
-h4 {
+.advertify-main h4 {
 	font-size: 1rem;
 	font-weight: 400;
 	color: #0ea5e9;
 }
 
-strong {
+.advertify-main strong {
 	font-weight: 700;
 }
 
-textarea,
-input[type='text'] {
-	border: 1px solid #0ea5e9;
+.advertify-main textarea,
+.advertify-main input[type='text'] {
 	width: 280px;
 	padding: 15px 15px;
 	border-radius: 5px;
 }
 
-textarea {
+.advertify-main textarea {
 	resize: none;
 	height: 75px;
 }
 
-input::placeholder,
-textarea::placeholder {
+.advertify-main input::placeholder,
+.advertify-main textarea::placeholder {
 	opacity: 0.4;
 	color: #0ea5e9;
 }
 
-button {
+.advertify-main button {
 	margin-top: 1em;
 	background: #0ea5e9;
 	width: 280px;
@@ -95,17 +94,16 @@ button {
 	font-size: 1.3rem;
 }
 
-label {
+.advertify-main label {
 	margin-bottom: -0.6em;
 	margin-top: 0.6em;
 	z-index: 1;
-	background-color: white;
 	padding: 0 0.5em;
 	color: #0369a1;
 }
 
 @media (min-width: 600px) {
-	main {
+	.advertify-main {
 		display: flex;
 	}
 
@@ -123,7 +121,7 @@ label {
 		width: 50%;
 	}
 
-	p {
+	.advertify-main p {
 		background-color: white;
 		color: #0369a1;
 		padding: 0.3em;
