@@ -10,6 +10,7 @@ export const useOpenAi = () => {
 		return new OpenAI({
 			dangerouslyAllowBrowser: true,
 			apiKey: apiKeys.openaiKey,
+			// This is useful if you are running the AI model locally, e.g running Meta Llama with LL Studio
 			baseURL:
 				process.env.NEXT_PUBLIC_OPENAI_BASE_URL || 'https://api.openai.com/v1',
 		});

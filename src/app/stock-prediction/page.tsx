@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useStockPrediction } from '@/hooks/openai/use-stock-prediction';
+import { useStockPrediction } from '@/hooks/openai';
 import './styles.css';
 
 export default function StockPrediction() {

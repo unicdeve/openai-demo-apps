@@ -10,6 +10,14 @@ const TEMPLATE_PAGES = [
 		label: 'Image Generation with Dall-e',
 		href: '/generate-image-with-dalle',
 	},
+	{
+		label: 'Advertify',
+		href: '/advertify',
+	},
+	{
+		label: 'Movie Pitch',
+		href: '/movie-pitch',
+	},
 ];
 
 export default function Home() {

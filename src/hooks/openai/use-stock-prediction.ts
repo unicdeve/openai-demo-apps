@@ -1,4 +1,4 @@
-import { ChatCompletionMessageParam } from 'openai/src/resources/index.js';
+import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { useOpenAi } from './use-openai';
 import { useState } from 'react';
 import { dates } from '@/utils/date';

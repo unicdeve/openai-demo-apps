@@ -1,5 +1,5 @@
 'use client';
-import { useImageGeneration } from '@/hooks/openai/use-image-gen';
+import { useImageGeneration } from '@/hooks/openai';
 import Image from 'next/image';
 import { useState } from 'react';
 import './styles.css';
@@ -12,7 +12,8 @@ export default function Home() {
 
 	const createImage = async () => {
 		const image = await generateImage(prompt);
-		setImage(image);
+
+		if (image) setImage(image);
 	};
 
 	return (
