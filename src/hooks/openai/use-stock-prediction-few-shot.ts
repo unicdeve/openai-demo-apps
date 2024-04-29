@@ -2,6 +2,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { useOpenAi } from './use-openai';
 import { useState } from 'react';
 import { useApiKeys } from '@/contexts/api-keys.context';
+import { toast } from 'sonner';
 
 export const useStockPredictionWithFewShot = () => {
 	const [error, setError] = useState('');
@@ -50,8 +51,11 @@ export const useStockPredictionWithFewShot = () => {
 			});
 			console.log(response);
 			setReport(response.choices[0].message.content);
-		} catch {
+		} catch (e) {
 			setError('Unable to generate report from openai');
+			if (e instanceof Error) {
+				toast.error(`Unable to generate report from openai: ${e.message}`);
+			}
 		} finally {
 			setIsGeneratingReports(false);
 			setisLoadingStockData(false);

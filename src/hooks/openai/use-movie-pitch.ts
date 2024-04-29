@@ -2,6 +2,7 @@ import { useOpenAi } from './use-openai';
 import { useState } from 'react';
 import { useApiKeys } from '@/contexts/api-keys.context';
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
+import { toast } from 'sonner';
 
 export const useMoviePitch = () => {
 	const [error, setError] = useState('');
@@ -37,8 +38,11 @@ export const useMoviePitch = () => {
 				messages,
 			});
 			setMoviePitch(response.choices[0].message.content);
-		} catch {
+		} catch (e) {
 			setError('Unable to generate movie pitch from openai');
+			if (e instanceof Error) {
+				toast.error(`Unable to generate report from openai: ${e.message}`);
+			}
 		} finally {
 			setisLoading(false);
 		}

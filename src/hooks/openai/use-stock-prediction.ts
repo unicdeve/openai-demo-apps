@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { useOpenAi } from './use-openai';
 import { useState } from 'react';
@@ -43,8 +44,11 @@ export const useStockPrediction = () => {
 			});
 			setReport(response.choices[0].message.content);
 			setTickers([]);
-		} catch {
+		} catch (e) {
 			setError('Unable to generate report from openai');
+			if (e instanceof Error) {
+				toast.error(`Unable to generate report from openai: ${e.message}`);
+			}
 		} finally {
 			setIsGeneratingReports(false);
 			setisLoadingStockData(false);
@@ -68,10 +72,11 @@ export const useStockPrediction = () => {
 					if (response.status === 200) {
 						return data;
 					} else {
-						setError(
+						toast.error(
 							`There was an error fetching stock data for the ticker: ${ticker}`
 						);
 					}
+					return;
 				})
 			);
 

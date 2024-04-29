@@ -1,6 +1,15 @@
 'use client';
 
-import { NativeDialog, Typography } from '@/components';
+import {
+	Modal,
+	ModalContent,
+	ModalBody,
+	ModalFooter,
+	Button,
+	useDisclosure,
+	Input,
+} from '@nextui-org/react';
+
 import {
 	ChangeEvent,
 	createContext,
@@ -28,6 +37,7 @@ const ApiKeysContext = createContext<IApiKeysProps | undefined>(undefined);
 export const ApiKeysProvider: FC<{
 	children: ReactNode;
 }> = ({ children }) => {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [openDialog, setOpenDialog] = useState(false);
 	// default value to be used locally because I won't set up with my personal keys
 	const [apiKeys, setApiKeys] = useState<ApiKeysType>({
@@ -45,41 +55,44 @@ export const ApiKeysProvider: FC<{
 	return (
 		<ApiKeysContext.Provider
 			value={{
-				openDialog,
-				setOpenDialog,
+				openDialog: isOpen,
+				setOpenDialog: onOpenChange,
 				apiKeys,
 			}}
 		>
-			<NativeDialog
-				open={openDialog}
-				onCancel={() => setOpenDialog(false)}
-				onConfirm={() => setOpenDialog(false)}
-			>
-				<div className='flex flex-col gap-8'>
-					<input
-						type='text'
-						name='openaiKey'
-						value={apiKeys.openaiKey}
-						onChange={onChange}
-						className='w-[150px]'
-						placeholder='OpenAI api key'
-					/>
-
-					<input
-						type='text'
-						name='polygoinKey'
-						value={apiKeys.polygoinKey}
-						onChange={onChange}
-						className='w-[150px]'
-						placeholder='Polygon api key'
-					/>
-					<Typography
-						className='mt-1'
-						variant='body3'
-						text="It's very easy to create a Polygon api key on https://polygon.io/"
-					/>
-				</div>
-			</NativeDialog>
+			<Modal isOpen={isOpen} onOpenChange={onOpenChange} placement='top-center'>
+				<ModalContent>
+					{(onClose) => (
+						<>
+							<ModalBody className='mt-8'>
+								<Input
+									autoFocus
+									variant='flat'
+									name='openaiKey'
+									value={apiKeys.openaiKey}
+									onChange={onChange}
+									placeholder='OpenAI api key'
+								/>
+								<Input
+									variant='flat'
+									name='polygoinKey'
+									value={apiKeys.polygoinKey}
+									onChange={onChange}
+									placeholder='Polygon api key'
+								/>
+							</ModalBody>
+							<ModalFooter>
+								<Button color='danger' variant='flat' onPress={onClose}>
+									Cancel
+								</Button>
+								<Button color='primary' onPress={onClose}>
+									Confirm
+								</Button>
+							</ModalFooter>
+						</>
+					)}
+				</ModalContent>
+			</Modal>
 			{children}
 		</ApiKeysContext.Provider>
 	);
