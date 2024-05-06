@@ -8,7 +8,7 @@ export const useBookList = () => {
 
 	/* Upload training data */
 	// const upload = await openai.files.create({
-	//     file: await fetch('/motivationalBotData.jsonl'),
+	//     file: await fetch('../../data/motivationalBotData.jsonl'),
 	//     purpose: 'fine-tune'
 	// })
 	// console.log(upload) this will give a file ID
